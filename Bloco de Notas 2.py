@@ -58,18 +58,28 @@ class BlocoDeNotas:
         self.caminho_arquivo = None
 
     def atualizar_status(self, event=None):
-        # Contagem de caracteres
+        # Pega o texto completo
         texto = self.text_area.get(1.0, tk.END)
+
+        # Contagem de caracteres (com e sem espaço)
         num_caracteres = len(texto) - 1  # Remove o último caractere '\n'
+        caracteres_sem_espaco = len(texto.replace(" ", "").replace("\n", "").replace("\t", ""))
+
+        # Contagem de palavras
+        palavras = texto.strip().split()
+        num_palavras = len(palavras)
 
         # Linha e coluna do cursor
-        posicao_cursor = self.text_area.index(tk.INSERT)  # Posição do cursor no formato "linha.coluna"
+        posicao_cursor = self.text_area.index(tk.INSERT)
         linha, coluna = posicao_cursor.split(".")
         linha = int(linha)
-        coluna = int(coluna) + 1  # Ajustar para 1-based
+        coluna = int(coluna) + 1
 
         # Atualiza a barra de status
-        self.status_bar.config(text=f"Linhas: {linha} | Colunas: {coluna} | {num_caracteres} caracteres")
+        self.status_bar.config(
+            text=f"Linhas: {linha} | Colunas: {coluna} | Caracteres (Com Espaço): {num_caracteres} | Caracteres (Sem Espaço): {caracteres_sem_espaco} | Palavras: {num_palavras}"
+        )
+
 
     def novo_arquivo(self):
         self.text_area.delete(1.0, tk.END)
